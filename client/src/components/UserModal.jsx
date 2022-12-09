@@ -12,11 +12,15 @@ import { app } from "../firebase";
 import axios from "axios";
 import { useEffect } from "react";
 import {
+	resetProfile,
 	updateProfileFail,
 	updateProfileRequest,
 	updateProfileSuccess,
 } from "../redux/profileRedux";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { logout } from "../redux/userRedux";
+import { responsive483 } from "../responsive";
 
 const Container = styled.div`
 	position: absolute;
@@ -48,6 +52,9 @@ const Main = styled.div`
 	border-radius: 8px;
 	padding: 10px;
 	z-index: 99999;
+	${responsive483({
+		width: "90%",
+	})}
 `;
 
 const Cancel = styled.span`
@@ -95,9 +102,21 @@ const Button = styled.button`
 	color: ${({ theme }) => theme.textSoft};
 `;
 
+const Logout = styled.button`
+	margin-top: 10px;
+	border: none;
+	padding: 6px;
+	cursor: pointer;
+	background-color: crimson;
+	font-weight: bold;
+	border-radius: 5px;
+	color: ${({ theme }) => theme.textSoft};
+`;
+
 const UserModal = ({ setOpenModal }) => {
 	const { currentProfile } = useSelector((state) => state.profile);
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const [inputs, setInputs] = useState({
 		name: currentProfile?.name,
@@ -186,6 +205,13 @@ const UserModal = ({ setOpenModal }) => {
 		}
 	};
 
+	const handleLogout = () => {
+		dispatch(logout());
+		dispatch(resetProfile());
+		navigate("/");
+		setOpenModal(false);
+	};
+
 	return (
 		<Container>
 			<Main>
@@ -230,6 +256,7 @@ const UserModal = ({ setOpenModal }) => {
 					</InputGroup>
 					<Button type="submit">Update</Button>
 				</Form>
+				<Logout onClick={handleLogout}>Logout</Logout>
 			</Main>
 		</Container>
 	);

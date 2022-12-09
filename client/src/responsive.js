@@ -31,3 +31,11 @@ export const responsive615 = (props) => {
 		}
 	`;
 };
+
+export const responsive483 = (props) => {
+	return css`
+		@media only screen and (max-width: 483px) {
+			${props}
+		}
+	`;
+};

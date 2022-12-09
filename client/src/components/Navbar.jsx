@@ -11,18 +11,23 @@ import UploadVideo from "./UploadVideo";
 import { resetProfile } from "../redux/profileRedux";
 import MenuIcon from "@mui/icons-material/Menu";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { responsive768 } from "../responsive";
+import { responsive768, responsive615, responsive483 } from "../responsive";
 
 const Container = styled.div`
 	background-color: ${({ theme }) => theme.bgLighter};
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
 	padding: 10px 20px;
 	width: 100%;
 	position: sticky;
 	top: 0;
 	height: 50px;
+`;
+
+const Div = styled.div`
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
 `;
 
 const Hamburger = styled.div`
@@ -107,11 +112,20 @@ const Avatar = styled.img`
 	object-fit: cover;
 `;
 
+const Uname = styled.span`
+	${responsive483({
+		display: "none",
+	})}
+`;
+
 const Logout = styled.p`
 	font-size: 14px;
 	color: crimson;
 	font-weight: 500;
 	cursor: pointer;
+	${responsive615({
+		display: "none",
+	})}
 `;
 
 const Navbar = ({
@@ -145,53 +159,55 @@ const Navbar = ({
 	return (
 		<>
 			<Container>
-				{!menuOpen && (
-					<Hamburger onClick={() => setMenuOpen(!menuOpen)}>
-						<MenuIcon />
-					</Hamburger>
-				)}
-				<InputContainer>
-					<Input
-						type="text"
-						placeholder="Search"
-						onChange={(e) => setQ(e.target.value)}
-					/>
-					<Icon>
-						<SearchIcon
-							onClick={handleNavigate}
-							style={{ cursor: "pointer" }}
+				<Div>
+					{!menuOpen && (
+						<Hamburger onClick={() => setMenuOpen(!menuOpen)}>
+							<MenuIcon />
+						</Hamburger>
+					)}
+					<InputContainer>
+						<Input
+							type="text"
+							placeholder="Search"
+							onChange={(e) => setQ(e.target.value)}
 						/>
-					</Icon>
-				</InputContainer>
-				<Theme onClick={() => setLightMode(!lightMode)}>
-					{lightMode ? <ModeNightOutlinedIcon /> : <LightModeIcon />}
-					<Mode>{lightMode ? "Dark" : "Light"} Mode</Mode>
-				</Theme>
-				{isAuthenticated ? (
-					<UserDiv>
-						<User>
-							<VideoCallOutlinedIcon
-								onClick={() => setOpen(true)}
+						<Icon>
+							<SearchIcon
+								onClick={handleNavigate}
 								style={{ cursor: "pointer" }}
 							/>
-							<UserInfo onClick={() => setOpenModal(true)}>
-								<Avatar src={currentProfile?.img} alt="" />
-								{currentProfile?.name}
-							</UserInfo>
-						</User>
-						<Logout onClick={handleLogout}>LOGOUT</Logout>
-					</UserDiv>
-				) : (
-					<Link
-						to="/signin"
-						style={{ textDecoration: "none", color: "inherit" }}
-					>
-						<Button>
-							<AccountCircleIcon />
-							SIGN IN
-						</Button>
-					</Link>
-				)}
+						</Icon>
+					</InputContainer>
+					<Theme onClick={() => setLightMode(!lightMode)}>
+						{lightMode ? <ModeNightOutlinedIcon /> : <LightModeIcon />}
+						<Mode>{lightMode ? "Dark" : "Light"} Mode</Mode>
+					</Theme>
+					{isAuthenticated ? (
+						<UserDiv>
+							<User>
+								<VideoCallOutlinedIcon
+									onClick={() => setOpen(true)}
+									style={{ cursor: "pointer" }}
+								/>
+								<UserInfo onClick={() => setOpenModal(true)}>
+									<Avatar src={currentProfile?.img} alt="" />
+									<Uname>{currentProfile?.name}</Uname>
+								</UserInfo>
+							</User>
+							<Logout onClick={handleLogout}>LOGOUT</Logout>
+						</UserDiv>
+					) : (
+						<Link
+							to="/signin"
+							style={{ textDecoration: "none", color: "inherit" }}
+						>
+							<Button>
+								<AccountCircleIcon />
+								SIGN IN
+							</Button>
+						</Link>
+					)}
+				</Div>
 			</Container>
 			{open && <UploadVideo setOpen={setOpen} />}
 		</>

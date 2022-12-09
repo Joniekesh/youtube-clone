@@ -132,7 +132,7 @@ const Menu = ({ lightMode, setLightMode, setMenuOpen }) => {
 
 	const handleClick = () => {
 		if (!TOKEN) {
-			toast.error("Please log in to view your subscriptios.", {
+			toast.error("Please sign in to view your subscriptios.", {
 				theme: "colored",
 			});
 		}
