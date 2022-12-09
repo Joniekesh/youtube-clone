@@ -20,6 +20,7 @@ import YoutubeLogo from "../images/logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { responsive768 } from "../responsive";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
 	flex: 1;
@@ -124,9 +125,18 @@ const LogoTitle = styled.h2`
 	})}
 `;
 
-const Menu = ({ lightMode, setLightMode, menuOpen, setMenuOpen }) => {
+const Menu = ({ lightMode, setLightMode, setMenuOpen }) => {
 	const { currentUser } = useSelector((state) => state.user);
+	const TOKEN = currentUser?.token;
 	const isAuthenticated = currentUser?.token;
+
+	const handleClick = () => {
+		if (!TOKEN) {
+			toast.error("Please log in to view your subscriptios.", {
+				theme: "colored",
+			});
+		}
+	};
 
 	return (
 		<Container>
@@ -163,6 +173,7 @@ const Menu = ({ lightMode, setLightMode, menuOpen, setMenuOpen }) => {
 				<Link
 					to="subscriptions"
 					style={{ textDecoration: "none", color: "inherit" }}
+					onClick={handleClick}
 				>
 					<MenuItem>
 						<SubscriptionsIcon style={{ fontSize: "18px" }} />

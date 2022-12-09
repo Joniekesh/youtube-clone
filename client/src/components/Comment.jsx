@@ -3,8 +3,6 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,20 +20,24 @@ const Container = styled.div`
 	border-bottom: 0.5px solid #ddd;
 `;
 
-const AvatarWrapper = styled.div``;
+const AvatarWrapper = styled.div`
+	flex: 1;
+`;
 
 const Right = styled.div`
+	flex: 12;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
+	position: relative;
 `;
 
 const Image = styled.img`
-	width: 36px;
-	height: 36px;
+	width: 34px;
+	height: 34px;
 	border-radius: 50%;
 	object-fit: cover;
-	margin-right: 16px;
+	margin-right: 10px;
 `;
 
 const Top = styled.div`
@@ -73,8 +75,6 @@ const Bottom = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: 20px;
-	position: relative;
 `;
 
 const Items = styled.div`
@@ -143,8 +143,6 @@ const Comment = ({ comment, videoId }) => {
 	const isDisliked = comment.dislikes?.some(
 		(dislike) => dislike._id === currentUser?.user._id
 	);
-
-	console.log(comment);
 
 	useEffect(() => {
 		const fetchUser = async () => {
@@ -261,16 +259,18 @@ const Comment = ({ comment, videoId }) => {
 							)}
 						</Item>
 					</Items>
-					<OverflowMenu>
-						<MoreVertIcon onClick={() => setOpen(!open)} />
-					</OverflowMenu>
-					{open && (
-						<DeleteModal>
-							<Delete onClick={handleDelete}>Delete</Delete>
-							<Cancel onClick={() => setOpen(false)}>Cancel</Cancel>
-						</DeleteModal>
+					{currentUser?.user._id === comment.userId && (
+						<OverflowMenu>
+							<MoreVertIcon onClick={() => setOpen(!open)} />
+						</OverflowMenu>
 					)}
 				</Bottom>
+				{open && (
+					<DeleteModal>
+						<Delete onClick={handleDelete}>Delete</Delete>
+						<Cancel onClick={() => setOpen(false)}>Cancel</Cancel>
+					</DeleteModal>
+				)}
 			</Right>
 		</Container>
 	);

@@ -14,6 +14,8 @@ import Posts from "./pages/Posts";
 import Post from "./pages/Post";
 import UserModal from "./components/UserModal";
 import { responsive768 } from "./responsive";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Container = styled.div`
 	display: flex;
@@ -52,6 +54,7 @@ function App() {
 		<ThemeProvider theme={lightMode ? lightTheme : darkTheme}>
 			<Container>
 				<Router>
+					<ToastContainer />
 					{menuOpen && (
 						<Menu
 							lightMode={lightMode}

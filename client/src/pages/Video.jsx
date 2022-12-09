@@ -19,8 +19,9 @@ import { subscription } from "../redux/userRedux";
 import { createComment, getVideo } from "../redux/videoApi";
 import { getChannel } from "../redux/profileApi";
 import UploadVideo from "../components/UploadVideo";
-import { responsive615, responsive965 } from "../responsive";
+import { responsive965 } from "../responsive";
 import SuggestionList from "../components/SuggestionList";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
 	display: flex;
@@ -284,10 +285,15 @@ const Video = ({ setOpen, open }) => {
 			},
 		};
 		try {
-			await axios.put(`/videos/addRemoveVideoLikes/${id}`, user?._id, config);
-			dispatch(addLike(user?._id));
+			if (TOKEN) {
+				await axios.put(`/videos/addRemoveVideoLikes/${id}`, user?._id, config);
+				dispatch(addLike(user?._id));
+			} else {
+				toast.error("Please login to add a like.", { theme: "colored" });
+			}
 		} catch (error) {
 			console.log(error);
+			toast.error("Error occured", { theme: "colored" });
 		}
 	};
 
@@ -297,12 +303,21 @@ const Video = ({ setOpen, open }) => {
 				Authorization: `Bearer ${TOKEN}`,
 			},
 		};
-		await axios.put(
-			`/videos/addRemoveVideoDislikes/${video._id}`,
-			user._id,
-			config
-		);
-		dispatch(removeLike(user._id));
+		try {
+			if (TOKEN) {
+				await axios.put(
+					`/videos/addRemoveVideoDislikes/${video._id}`,
+					user._id,
+					config
+				);
+				dispatch(removeLike(user._id));
+			} else {
+				toast.error("Please log in to dislike a post.", { theme: "colored" });
+			}
+		} catch (error) {
+			console.log(error);
+			toast.error("Error occured", { theme: "colored" });
+		}
 	};
 
 	const subscribeHandler = async () => {
@@ -312,29 +327,38 @@ const Video = ({ setOpen, open }) => {
 			},
 		};
 		try {
-			await axios.put(
-				`/users/subunsub/${currentChannel._id}`,
-				{ id: currentChannel._id },
-				config
-			);
-			dispatch(subscription(currentChannel._id));
-			dispatch(getChannel(video.userId));
+			if (TOKEN) {
+				await axios.put(
+					`/users/subunsub/${currentChannel._id}`,
+					{ id: currentChannel._id },
+					config
+				);
+				dispatch(subscription(currentChannel._id));
+				dispatch(getChannel(video.userId));
+			} else {
+				toast.error("Please log in to subscribe.", { theme: "colored" });
+			}
 		} catch (error) {
 			console.log(error);
+			toast.error("Error occured", { theme: "colored" });
 		}
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const newComment = {
-			userId: user._id,
-			videoId: id,
-			text,
-		};
+		if (TOKEN) {
+			const newComment = {
+				userId: user._id,
+				videoId: id,
+				text,
+			};
 
-		dispatch(createComment(video._id, newComment));
-		setText("");
+			dispatch(createComment(video._id, newComment));
+			setText("");
+		} else {
+			toast.error("Please log in to add a comment.", { theme: "colored" });
+		}
 	};
 
 	const handleOpenVideoEdit = () => {

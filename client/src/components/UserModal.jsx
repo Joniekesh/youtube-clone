@@ -16,6 +16,7 @@ import {
 	updateProfileRequest,
 	updateProfileSuccess,
 } from "../redux/profileRedux";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
 	position: absolute;
@@ -139,7 +140,11 @@ const UserModal = ({ setOpenModal }) => {
 						break;
 				}
 			},
-			(error) => {},
+			(error) => {
+				if (error) {
+					toast.error("Error with photo upload.", { theme: "colored" });
+				}
+			},
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 					setInputs((prev) => {
@@ -170,10 +175,14 @@ const UserModal = ({ setOpenModal }) => {
 		try {
 			const res = await axios.put("/users/me", { ...inputs }, config);
 			dispatch(updateProfileSuccess(res.data));
-			res.status === 200 && setOpenModal(false);
+			if (res.status === 200) {
+				setOpenModal(false);
+				toast.success("Profile Updated.", { theme: "colored" });
+			}
 		} catch (error) {
 			console.log(error);
 			dispatch(updateProfileFail());
+			toast.error("Error updating profile.", { theme: "colored" });
 		}
 	};
 

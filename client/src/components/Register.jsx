@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { getProfile } from "../redux/profileApi";
 import {
@@ -48,7 +49,7 @@ const Register = () => {
 		e.preventDefault();
 
 		if (password !== confirmPassword) {
-			alert("Passwords do not match");
+			toast.error("Passwords do not match.", { theme: "colored" });
 		} else {
 			dispatch(registerRequest());
 			try {
@@ -56,8 +57,10 @@ const Register = () => {
 				dispatch(registerSuccess(res.data));
 				dispatch(getProfile());
 				res.status === 201 && navigate("/");
+				toast.success("Registration Success!", { theme: "colored" });
 			} catch (err) {
 				dispatch(registerFail());
+				toast.error(err.response.data);
 			}
 		}
 	};

@@ -12,6 +12,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateVideo } from "../redux/videoApi";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
 	position: absolute;
@@ -95,6 +96,8 @@ const UploadVideo = ({ setOpen, isUpdate, setIsUpdate, currentVideo }) => {
 	const { currentUser } = useSelector((state) => state.user);
 	const TOKEN = currentUser?.token;
 
+	const { error } = useSelector((state) => state.video);
+
 	const handleChange = (e) => {
 		setInputs((prev) => {
 			return { ...prev, [e.target.name]: e.target.value };
@@ -131,7 +134,11 @@ const UploadVideo = ({ setOpen, isUpdate, setIsUpdate, currentVideo }) => {
 						break;
 				}
 			},
-			(error) => {},
+			(error) => {
+				if (error) {
+					toast.error("Error with data upload", { theme: "colored" });
+				}
+			},
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 					setInputs((prev) => {
@@ -165,18 +172,29 @@ const UploadVideo = ({ setOpen, isUpdate, setIsUpdate, currentVideo }) => {
 				Authorization: `Bearer ${TOKEN}`,
 			},
 		};
-
-		const res = await axios.post("/videos", { ...inputs, tags }, config);
-		setOpen(false);
-		res.status === 200 && navigate(`/video/${res.data._id}`);
+		try {
+			const res = await axios.post("/videos", { ...inputs, tags }, config);
+			setOpen(false);
+			if (res.status === 200) {
+				navigate(`/video/${res.data._id}`);
+				toast.success("Video created.", { theme: "colored" });
+			}
+		} catch (error) {
+			toast.error("Error with upload.", { theme: "colored" });
+		}
 	};
 
 	const handleEdit = async (e) => {
 		e.preventDefault();
 
-		dispatch(updateVideo(currentVideo._id, { ...inputs, tags }));
-		setOpen(false);
-		setIsUpdate(false);
+		if (error) {
+			toast.error("Error with video upload.", { theme: "colored" });
+		} else {
+			dispatch(updateVideo(currentVideo._id, { ...inputs, tags }));
+			setOpen(false);
+			setIsUpdate(false);
+			toast.success("Video updated.", { theme: "colored" });
+		}
 	};
 
 	const handleClose = () => {

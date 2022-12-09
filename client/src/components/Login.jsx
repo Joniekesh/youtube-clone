@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { getProfile } from "../redux/profileApi";
 import { loginFail, loginRequest, loginSuccess } from "../redux/userRedux";
+import { toast } from "react-toastify";
 
 const Container = styled.form`
 	display: flex;
@@ -35,6 +36,8 @@ const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
+	const { error } = useSelector((state) => state.user);
+
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -46,8 +49,10 @@ const Login = () => {
 			dispatch(loginSuccess(res.data));
 			dispatch(getProfile());
 			res.status === 200 && navigate("/");
+			toast.success("Login Success!", { theme: "colored" });
 		} catch (err) {
-			dispatch(loginFail());
+			dispatch(loginFail(err.response.data));
+			toast.error(error, { theme: "colored" });
 		}
 	};
 
