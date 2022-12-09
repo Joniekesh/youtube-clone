@@ -234,6 +234,8 @@ const Suggestions = styled.div`
 	padding-bottom: 50px;
 	${responsive965({
 		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
 	})}
 `;
 
@@ -480,7 +482,7 @@ const Video = ({ setOpen, open }) => {
 								/>
 								<Buttons>
 									<Button1 onClick={() => setShow(!show)}>
-										{show ? "Hide Comments" : "Show Comments"}
+										{show ? "Hide" : "Show"}
 									</Button1>
 									<CommentCount>
 										{video?.comments.length} Comment
