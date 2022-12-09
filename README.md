@@ -1,5 +1,4 @@
-# youtube-clone
-
+# youtube-clone based on MERN stack Technologies.
 # Desktop Screen
 ![youtube-full-next](https://user-images.githubusercontent.com/73966666/206684607-031deea9-a195-4c19-90bd-83af18783581.png)
 # Ipad Screen
