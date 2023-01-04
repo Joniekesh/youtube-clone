@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import RightMenuItem from "./RightMenuItem";
 import { responsive965 } from "../responsive";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	flex: 1.5;
@@ -22,7 +22,7 @@ const RightMenu = ({ tags }) => {
 
 	useEffect(() => {
 		const fetctVideos = async () => {
-			const res = await axios.get(`/videos/tags?tags=${tags}`);
+			const res = await makeRequest.get(`/videos/tags?tags=${tags}`);
 			setVideos(res.data);
 		};
 		fetctVideos();

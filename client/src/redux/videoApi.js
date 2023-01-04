@@ -1,4 +1,4 @@
-import axios from "axios";
+import makeRequest from "../utils/makeRequest";
 import {
 	addComment,
 	getVideoFail,
@@ -23,7 +23,7 @@ export const getVideo = (id) => async (dispatch, getState) => {
 
 	dispatch(getVideoRequest());
 	try {
-		const res = await axios.get(`/videos/find/${id}`, config);
+		const res = await makeRequest.get(`/videos/find/${id}`, config);
 		dispatch(getVideoSuccess(res.data));
 	} catch (error) {
 		dispatch(getVideoFail());
@@ -43,7 +43,11 @@ export const updateVideo = (id, data) => async (dispatch, getState) => {
 
 	dispatch(updateVideoRequest());
 	try {
-		const res = await axios.put(`/videos/find/${id}/update`, data, config);
+		const res = await makeRequest.put(
+			`/videos/find/${id}/update`,
+			data,
+			config
+		);
 		dispatch(updateVideoSuccess(res.data));
 	} catch (error) {
 		dispatch(updateVideoFail());
@@ -63,7 +67,7 @@ export const createComment = (id, data) => async (dispatch, getState) => {
 	};
 
 	try {
-		const res = await axios.post(`/videos/comments/${id}`, data, config);
+		const res = await makeRequest.post(`/videos/comments/${id}`, data, config);
 		dispatch(addComment(res.data));
 	} catch (error) {
 		console.log(error);

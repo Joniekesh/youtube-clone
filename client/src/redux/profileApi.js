@@ -8,7 +8,7 @@ import {
 	getChannelSuccess,
 	getChannelFail,
 } from "./channelRedux";
-import axios from "axios";
+import makeRequest from "../utils/makeRequest";
 
 // Get User profile
 export const getProfile = () => async (dispatch, getState) => {
@@ -24,7 +24,7 @@ export const getProfile = () => async (dispatch, getState) => {
 
 	dispatch(getProfileRequest());
 	try {
-		const res = await axios.get("/auth/me", config);
+		const res = await makeRequest.get("/auth/me", config);
 		dispatch(getProfileSuccess(res.data));
 	} catch (error) {
 		console.log(error);
@@ -46,7 +46,7 @@ export const getChannel = (id) => async (dispatch, getState) => {
 
 	dispatch(getChannelRequest());
 	try {
-		const res = await axios.get(`/users/find/${id}`, config);
+		const res = await makeRequest.get(`/users/find/${id}`, config);
 		dispatch(getChannelSuccess(res.data));
 	} catch (error) {
 		console.log(error);

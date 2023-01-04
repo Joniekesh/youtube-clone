@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +5,7 @@ import styled from "styled-components";
 import { getProfile } from "../redux/profileApi";
 import { loginFail, loginRequest, loginSuccess } from "../redux/userRedux";
 import { toast } from "react-toastify";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.form`
 	display: flex;
@@ -45,7 +45,7 @@ const Login = () => {
 		e.preventDefault();
 		dispatch(loginRequest());
 		try {
-			const res = await axios.post("/auth/login", { email, password });
+			const res = await makeRequest.post("/auth/login", { email, password });
 			dispatch(loginSuccess(res.data));
 			dispatch(getProfile());
 			res.status === 200 && navigate("/");

@@ -1,11 +1,10 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import axios from "axios";
 import { useState } from "react";
-import { setUseProxies } from "immer";
 import { addPostLike } from "../redux/postApi";
 import { useDispatch, useSelector } from "react-redux";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	display: flex;
@@ -78,7 +77,7 @@ const PostItem = ({ post }) => {
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const res = await axios.get(`/users/find/${post.userId}`);
+			const res = await makeRequest.get(`/users/find/${post.userId}`);
 			setUser(res.data);
 		};
 		fetchUser();

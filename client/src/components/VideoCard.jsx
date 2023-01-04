@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
 import { format } from "timeago.js";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	display: flex;
@@ -64,7 +64,7 @@ const VideoCard = ({ video }) => {
 
 	useEffect(() => {
 		const fetchChannel = async () => {
-			const res = await axios.get(`/users/find/${video.userId}`);
+			const res = await makeRequest.get(`/users/find/${video.userId}`);
 			setChannel(res.data);
 		};
 		fetchChannel();
@@ -72,7 +72,7 @@ const VideoCard = ({ video }) => {
 
 	const handleNavigate = async () => {
 		try {
-			const res = await axios.put(`/videos/views/${video._id}`);
+			const res = await makeRequest.put(`/videos/views/${video._id}`);
 
 			res.status === 200 && navigate(`/video/${video._id}`);
 		} catch (error) {

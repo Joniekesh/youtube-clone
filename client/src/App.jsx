@@ -29,9 +29,6 @@ const Main = styled.div`
 		width: 8px;
 		background-color: teal;
 	}
-	/* ::-webkit-scrollbar-track {
-		background-color: white;
-	} */
 `;
 
 const Wrapper = styled.div`

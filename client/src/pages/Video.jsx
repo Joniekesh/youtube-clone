@@ -108,8 +108,8 @@ const InfoLeft = styled.div`
 `;
 
 const InfoImg = styled.img`
-	width: 36px;
-	height: 36px;
+	width: 30px;
+	height: 30px;
 	border-radius: 50%;
 	object-fit: cover;
 	margin-right: 16px;
@@ -159,8 +159,8 @@ const CommentForm = styled.div`
 const AvatarDiv = styled.div``;
 
 const Image = styled.img`
-	width: 36px;
-	height: 36px;
+	width: 30px;
+	height: 30px;
 	border-radius: 50%;
 	object-fit: cover;
 	margin-right: 16px;
@@ -234,8 +234,6 @@ const Suggestions = styled.div`
 	padding-bottom: 50px;
 	${responsive965({
 		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
 	})}
 `;
 
@@ -291,7 +289,7 @@ const Video = ({ setOpen, open }) => {
 				await axios.put(`/videos/addRemoveVideoLikes/${id}`, user?._id, config);
 				dispatch(addLike(user?._id));
 			} else {
-				toast.error("Please sign to add a like.", { theme: "colored" });
+				toast.error("Please login to add a like.", { theme: "colored" });
 			}
 		} catch (error) {
 			console.log(error);
@@ -314,7 +312,7 @@ const Video = ({ setOpen, open }) => {
 				);
 				dispatch(removeLike(user._id));
 			} else {
-				toast.error("Please sign in to dislike a post.", { theme: "colored" });
+				toast.error("Please log in to dislike a post.", { theme: "colored" });
 			}
 		} catch (error) {
 			console.log(error);
@@ -338,7 +336,7 @@ const Video = ({ setOpen, open }) => {
 				dispatch(subscription(currentChannel._id));
 				dispatch(getChannel(video.userId));
 			} else {
-				toast.error("Please sign in to subscribe.", { theme: "colored" });
+				toast.error("Please log in to subscribe.", { theme: "colored" });
 			}
 		} catch (error) {
 			console.log(error);
@@ -359,7 +357,7 @@ const Video = ({ setOpen, open }) => {
 			dispatch(createComment(video._id, newComment));
 			setText("");
 		} else {
-			toast.error("Please sign in to add a comment.", { theme: "colored" });
+			toast.error("Please log in to add a comment.", { theme: "colored" });
 		}
 	};
 
@@ -379,13 +377,10 @@ const Video = ({ setOpen, open }) => {
 		try {
 			if (window.confirm("Are you SURE? This cannot be UNDONE!")) {
 				const res = await axios.delete(`/videos/${video._id}`, config);
-				if (res.status === 200) {
-					navigate("/");
-					toast.success("Video deleted.", { theme: "colored" });
-				}
+				res.status === 200 && navigate("/");
 			}
 		} catch (error) {
-			toast.error("Error deleting video.", { theme: "colored" });
+			console.log(error);
 		}
 	};
 
@@ -458,19 +453,17 @@ const Video = ({ setOpen, open }) => {
 											gap: "30px",
 										}}
 									>
-										<Button onClick={handleDelete}>Delete</Button>
-										<Button1 onClick={handleOpenVideoEdit}>Edit</Button1>
+										<Button onClick={handleDelete}>Delete Video</Button>
+										<Button1 onClick={handleOpenVideoEdit}>Edit Video</Button1>
 									</Buttons>
 								)}
 							</UserInfo>
 							<InfoText>{video?.desc}</InfoText>
 						</Bottom>
 						<CommentForm>
-							{currentUser && (
-								<AvatarDiv>
-									<Image src={currentProfile?.img} alt="" />
-								</AvatarDiv>
-							)}
+							<AvatarDiv>
+								<Image src={currentProfile?.img} alt="" />
+							</AvatarDiv>
 							<Wrapper onSubmit={handleSubmit}>
 								<Input
 									type="text"

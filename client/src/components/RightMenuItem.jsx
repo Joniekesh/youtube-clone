@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { format } from "timeago.js";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import makeRequest from "../utils/makeRequest";
 
 const ListItem = styled.div`
 	display: flex;
@@ -51,7 +51,7 @@ const RightMenuItem = ({ video }) => {
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const res = await axios.get(`/users/find/${video.userId}`);
+			const res = await makeRequest.get(`/users/find/${video.userId}`);
 			setUser(res.data);
 		};
 		fetchUser();

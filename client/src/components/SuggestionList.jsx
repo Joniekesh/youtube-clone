@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import SuggestionListItem from "./SuggestionListItem";
-import axios from "axios";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	display: flex;
@@ -15,7 +15,7 @@ const SuggestionList = ({ tags }) => {
 
 	useEffect(() => {
 		const fetctVideos = async () => {
-			const res = await axios.get(`/videos/tags?tags=${tags}`);
+			const res = await makeRequest.get(`/videos/tags?tags=${tags}`);
 			setVideos(res.data);
 		};
 		fetctVideos();

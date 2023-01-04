@@ -9,7 +9,6 @@ import {
 	getDownloadURL,
 } from "firebase/storage";
 import { app } from "../firebase";
-import axios from "axios";
 import { useEffect } from "react";
 import {
 	resetProfile,
@@ -21,6 +20,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/userRedux";
 import { responsive483 } from "../responsive";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	position: absolute;
@@ -192,7 +192,7 @@ const UserModal = ({ setOpenModal }) => {
 		};
 		dispatch(updateProfileRequest());
 		try {
-			const res = await axios.put("/users/me", { ...inputs }, config);
+			const res = await makeRequest.put("/users/me", { ...inputs }, config);
 			dispatch(updateProfileSuccess(res.data));
 			if (res.status === 200) {
 				setOpenModal(false);

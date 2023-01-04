@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import axios from "axios";
 import { useState, useEffect } from "react";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
@@ -13,6 +12,7 @@ import {
 import { getVideo } from "../redux/videoApi";
 import { format } from "timeago.js";
 import { useNavigate } from "react-router-dom";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	display: flex;
@@ -33,8 +33,8 @@ const Right = styled.div`
 `;
 
 const Image = styled.img`
-	width: 34px;
-	height: 34px;
+	width: 30px;
+	height: 30px;
 	border-radius: 50%;
 	object-fit: cover;
 	margin-right: 10px;
@@ -112,8 +112,8 @@ const DeleteModal = styled.div`
 	flex-direction: column;
 	gap: 12px;
 	position: absolute;
-	right: 10px;
-	top: 20px;
+	right: 0px;
+	top: 80px;
 	z-index: 5;
 	font-size: 12px;
 `;
@@ -146,7 +146,7 @@ const Comment = ({ comment, videoId }) => {
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const res = await axios.get(`/users/find/${comment.userId}`);
+			const res = await makeRequest.get(`/users/find/${comment.userId}`);
 			setUser(res.data);
 		};
 		fetchUser();
@@ -160,7 +160,7 @@ const Comment = ({ comment, videoId }) => {
 		};
 
 		try {
-			await axios.put(
+			await makeRequest.put(
 				`/videos/comments/addRemoveLikes/${videoId}/${comment._id}`,
 				{ userId: currentUser?.user._id },
 				config
@@ -187,7 +187,7 @@ const Comment = ({ comment, videoId }) => {
 		};
 
 		try {
-			await axios.put(
+			await makeRequest.put(
 				`/videos/comments/addRemoveDislikes/${videoId}/${comment._id}`,
 				{ userId: currentUser?.user._id },
 				config
@@ -214,8 +214,12 @@ const Comment = ({ comment, videoId }) => {
 			},
 		};
 		try {
-			await axios.delete(`/videos/comments/${videoId}/${comment._id}`, config);
+			await makeRequest.delete(
+				`/videos/comments/${videoId}/${comment._id}`,
+				config
+			);
 			dispatch(deleteComment(comment._id));
+			dispatch(getVideo(videoId));
 			setOpen(false);
 			navigate(`/video/${videoId}`);
 		} catch (error) {

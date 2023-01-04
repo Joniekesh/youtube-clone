@@ -8,11 +8,11 @@ import {
 	getDownloadURL,
 } from "firebase/storage";
 import { app } from "../firebase";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateVideo } from "../redux/videoApi";
 import { toast } from "react-toastify";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	position: absolute;
@@ -173,7 +173,11 @@ const UploadVideo = ({ setOpen, isUpdate, setIsUpdate, currentVideo }) => {
 			},
 		};
 		try {
-			const res = await axios.post("/videos", { ...inputs, tags }, config);
+			const res = await makeRequest.post(
+				"/videos",
+				{ ...inputs, tags },
+				config
+			);
 			setOpen(false);
 			if (res.status === 200) {
 				navigate(`/video/${res.data._id}`);

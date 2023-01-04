@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +9,7 @@ import {
 	registerRequest,
 	registerSuccess,
 } from "../redux/userRedux";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.form`
 	display: flex;
@@ -53,7 +53,7 @@ const Register = () => {
 		} else {
 			dispatch(registerRequest());
 			try {
-				const res = await axios.post("/auth", { name, email, password });
+				const res = await makeRequest.post("/auth", { name, email, password });
 				dispatch(registerSuccess(res.data));
 				dispatch(getProfile());
 				res.status === 201 && navigate("/");

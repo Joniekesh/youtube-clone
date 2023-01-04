@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { format } from "timeago.js";
-import axios from "axios";
+import makeRequest from "../utils/makeRequest";
 
 const ListItem = styled.div`
 	display: flex;
@@ -52,7 +52,7 @@ const SuggestionListItem = ({ video }) => {
 
 	useEffect(() => {
 		const fetchUser = async () => {
-			const res = await axios.get(`/users/find/${video.userId}`);
+			const res = await makeRequest.get(`/users/find/${video.userId}`);
 			setUser(res.data);
 		};
 		fetchUser();
