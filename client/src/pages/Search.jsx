@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 import VideoCard from "../components/VideoCard";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	display: flex;
@@ -16,7 +16,7 @@ const Search = () => {
 
 	useEffect(() => {
 		const fetchVideos = async () => {
-			const res = await axios.get(`/videos/search${query}`);
+			const res = await makeRequest.get(`/videos/search${query}`);
 			setVideos(res.data);
 		};
 		fetchVideos();

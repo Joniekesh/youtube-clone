@@ -9,7 +9,6 @@ import SaveAltOutlinedIcon from "@mui/icons-material/SaveAltOutlined";
 import Comment from "../components/Comment";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { removeLike } from "../redux/videoRedux";
 import { format } from "timeago.js";
@@ -22,6 +21,7 @@ import UploadVideo from "../components/UploadVideo";
 import { responsive965 } from "../responsive";
 import SuggestionList from "../components/SuggestionList";
 import { toast } from "react-toastify";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	display: flex;
@@ -286,7 +286,11 @@ const Video = ({ setOpen, open }) => {
 		};
 		try {
 			if (TOKEN) {
-				await axios.put(`/videos/addRemoveVideoLikes/${id}`, user?._id, config);
+				await makeRequest.put(
+					`/videos/addRemoveVideoLikes/${id}`,
+					user?._id,
+					config
+				);
 				dispatch(addLike(user?._id));
 			} else {
 				toast.error("Please login to add a like.", { theme: "colored" });
@@ -305,7 +309,7 @@ const Video = ({ setOpen, open }) => {
 		};
 		try {
 			if (TOKEN) {
-				await axios.put(
+				await makeRequest.put(
 					`/videos/addRemoveVideoDislikes/${video._id}`,
 					user._id,
 					config
@@ -328,7 +332,7 @@ const Video = ({ setOpen, open }) => {
 		};
 		try {
 			if (TOKEN) {
-				await axios.put(
+				await makeRequest.put(
 					`/users/subunsub/${currentChannel._id}`,
 					{ id: currentChannel._id },
 					config
@@ -376,7 +380,7 @@ const Video = ({ setOpen, open }) => {
 
 		try {
 			if (window.confirm("Are you SURE? This cannot be UNDONE!")) {
-				const res = await axios.delete(`/videos/${video._id}`, config);
+				const res = await makeRequest.delete(`/videos/${video._id}`, config);
 				res.status === 200 && navigate("/");
 			}
 		} catch (error) {

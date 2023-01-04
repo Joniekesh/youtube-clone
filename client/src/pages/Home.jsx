@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import HomeDetails from "../components/HomeDetails";
-import axios from "axios";
 import { useSelector } from "react-redux";
+import makeRequest from "../utils/makeRequest";
 
 const Container = styled.div`
 	display: flex;
@@ -22,7 +22,7 @@ const Home = ({ type }) => {
 				},
 			};
 
-			const res = await axios.get(`/videos/${type}`, config);
+			const res = await makeRequest.get(`/videos/${type}`, config);
 			setVideos(res.data);
 		};
 		fetchVideos();
