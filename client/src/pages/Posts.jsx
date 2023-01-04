@@ -17,7 +17,7 @@ const PostList = styled.div`
 
 const Posts = () => {
 	const dispatch = useDispatch();
-	const { posts, loading, error } = useSelector((state) => state.post);
+	const { posts, loading } = useSelector((state) => state.post);
 
 	useEffect(() => {
 		dispatch(getPosts());

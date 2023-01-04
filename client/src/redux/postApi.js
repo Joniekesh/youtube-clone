@@ -30,7 +30,7 @@ export const addPostLike = (id, data) => async (dispatch, getState) => {
 	};
 
 	try {
-		const res = await makeRequest.put(`/posts/likes/${id}`, config);
+		await makeRequest.put(`/posts/likes/${id}`, config);
 		dispatch(likeUnlikePost(id, data, user));
 	} catch (error) {}
 };

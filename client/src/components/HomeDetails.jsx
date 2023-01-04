@@ -16,7 +16,7 @@ const HomeDetails = ({ videos }) => {
 	return (
 		<Container>
 			<VideoList>
-				{videos.map((video) => (
+				{videos?.map((video) => (
 					<VideoCard video={video} key={video._id} />
 				))}
 			</VideoList>
